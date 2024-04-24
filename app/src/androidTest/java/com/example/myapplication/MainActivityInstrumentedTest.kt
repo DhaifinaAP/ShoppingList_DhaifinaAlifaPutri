@@ -13,38 +13,48 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class MainActivityInstrumentedTest {
 
+    /**
+     * Test Case untuk menambahkan item ke dalam daftar.
+     * Ini menjalankan aktivitas, memasukkan teks ke dalam EditText, mengklik tombol tambah,
+     * dan memeriksa apakah item ditampilkan dalam daftar.
+     */
     @Test
     fun addItemToList() {
-        // Launch the activity
+        // Menjalankan aktivitas
         val scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        // Enter text into the EditText and click the add button
+        // Memasukkan teks ke dalam EditText dan mengklik tombol tambah
         onView(withId(R.id.editTextItem)).perform(typeText("Test Item"), closeSoftKeyboard())
         onView(withId(R.id.buttonAdd)).perform(click())
 
-        // Check if the item is added to the list
+        // Memeriksa apakah item ditambahkan ke dalam daftar
         onView(withText("Test Item")).check(matches(isDisplayed()))
 
-        // Close the activity
+        // Menutup aktivitas
         scenario.close()
     }
 
+    /**
+     * Test Case untuk menghapus item dari daftar.
+     * Ini menjalankan aktivitas, menambahkan item, melakukan long press untuk menghapusnya,
+     * dan memeriksa apakah item tersebut benar-benar dihapus dari daftar.
+     */
     @Test
     fun removeItemFromList() {
-        // Launch the activity
+        // Menjalankan aktivitas
         val scenario = ActivityScenario.launch(MainActivity::class.java)
 
-        // Add an item to the list
+        // Menambahkan item ke dalam daftar
         onView(withId(R.id.editTextItem)).perform(typeText("Test Item"), closeSoftKeyboard())
         onView(withId(R.id.buttonAdd)).perform(click())
 
-        // Long press to remove the item
+        // Long press untuk menghapus item
         onView(withText("Test Item")).perform(longClick())
 
-        // Check if the item is removed from the list
+        // Memeriksa apakah item telah dihapus dari daftar
         onView(withText("Test Item")).check(doesNotExist())
 
-        // Close the activity
+        // Menutup aktivitas
         scenario.close()
     }
 }

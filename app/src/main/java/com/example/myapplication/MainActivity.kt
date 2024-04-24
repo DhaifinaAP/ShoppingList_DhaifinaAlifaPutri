@@ -9,9 +9,12 @@ import android.widget.ListView
 
 class MainActivity : AppCompatActivity() {
 
+        // Deklarasi variabel untuk tampilan
         private lateinit var editTextItem: EditText
         private lateinit var buttonAdd: Button
         private lateinit var listViewItems: ListView
+
+        // Deklarasi variabel untuk daftar item
         private lateinit var itemList: MutableList<String>
         private lateinit var adapter: ArrayAdapter<String>
 
@@ -24,6 +27,7 @@ class MainActivity : AppCompatActivity() {
                 buttonAdd = findViewById(R.id.buttonAdd)
                 listViewItems = findViewById(R.id.listViewItems)
 
+                // Inisialisasi daftar item dan adapter
                 itemList = ArrayList()
                 adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, itemList)
                 listViewItems.adapter = adapter
