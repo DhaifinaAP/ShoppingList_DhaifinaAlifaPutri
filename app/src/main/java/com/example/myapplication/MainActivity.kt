@@ -1,43 +1,52 @@
 package com.example.myapplication
 
-import org.junit.Assert.*
-import org.junit.Before
-import org.junit.Test
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ListView
 
-class MainActivityTest {
+class MainActivity : AppCompatActivity() {
+        private lateinit var editTextItem: EditText
+        private lateinit var buttonAdd: Button
+        private lateinit var listViewItems: ListView
+        lateinit var itemList: ArrayList<String>
+        private lateinit var adapter: ArrayAdapter<String>
 
-    private lateinit var mainActivity: MainActivity
+        override fun onCreate(savedInstanceState: Bundle?) {
+                super.onCreate(savedInstanceState)
+                setContentView(R.layout.activity_main)
 
-    @Before
-    fun setUp() {
-        mainActivity = MainActivity()
-        mainActivity.onCreate(null) // Simulate activity creation
-    }
+                editTextItem = findViewById(R.id.editTextItem)
+                buttonAdd = findViewById(R.id.buttonAdd)
+                listViewItems = findViewById(R.id.listViewItems)
 
-    @Test
-    fun testAddItemToList() {
-        // Initial empty list
-        assertTrue(mainActivity.itemList.isEmpty())
+                itemList = ArrayList()
+                adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, itemList)
+                listViewItems.adapter = adapter
 
-        // Add an item
-        mainActivity.addItemToList("Test Item")
+                buttonAdd.setOnClickListener {
+                        val newItem = editTextItem.text.toString()
+                        if (newItem.isNotEmpty()) {
+                                addItemToList(newItem)
+                                editTextItem.text.clear()
+                        }
+                }
 
-        // Check if the item is added to the list
-        assertEquals(1, mainActivity.itemList.size)
-        assertEquals("Test Item", mainActivity.itemList[0])
-    }
+                listViewItems.setOnItemLongClickListener { _, _, position, _ ->
+                        removeItemFromList(position)
+                        true
+                }
+        }
 
-    @Test
-    fun testRemoveItemFromList() {
-        // Add some items to the list
-        mainActivity.itemList.addAll(listOf("Item 1", "Item 2", "Item 3"))
+        fun addItemToList(item: String) {
+                itemList.add(item)
+                adapter.notifyDataSetChanged()
+        }
 
-        // Remove an item
-        mainActivity.removeItemFromList(1)
-
-        // Check if the item is removed and the list size is updated
-        assertEquals(2, mainActivity.itemList.size)
-        assertEquals("Item 1", mainActivity.itemList[0])
-        assertEquals("Item 3", mainActivity.itemList[1])
-    }
+        fun removeItemFromList(position: Int) {
+                itemList.removeAt(position)
+                adapter.notifyDataSetChanged()
+        }
 }
