@@ -8,16 +8,18 @@ import android.widget.EditText
 import android.widget.ListView
 
 class MainActivity : AppCompatActivity() {
+
         private lateinit var editTextItem: EditText
         private lateinit var buttonAdd: Button
         private lateinit var listViewItems: ListView
-        lateinit var itemList: ArrayList<String>
+        private lateinit var itemList: MutableList<String>
         private lateinit var adapter: ArrayAdapter<String>
 
         override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
                 setContentView(R.layout.activity_main)
 
+                // Inisialisasi tampilan dan adapter
                 editTextItem = findViewById(R.id.editTextItem)
                 buttonAdd = findViewById(R.id.buttonAdd)
                 listViewItems = findViewById(R.id.listViewItems)
@@ -26,6 +28,7 @@ class MainActivity : AppCompatActivity() {
                 adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, itemList)
                 listViewItems.adapter = adapter
 
+                // Set listener untuk buttonAdd
                 buttonAdd.setOnClickListener {
                         val newItem = editTextItem.text.toString()
                         if (newItem.isNotEmpty()) {
@@ -34,19 +37,24 @@ class MainActivity : AppCompatActivity() {
                         }
                 }
 
+                // Set listener untuk item yang diklik dalam listViewItems
                 listViewItems.setOnItemLongClickListener { _, _, position, _ ->
                         removeItemFromList(position)
                         true
                 }
         }
 
-        fun addItemToList(item: String) {
+        // Metode publik untuk menambahkan item ke daftar
+        private fun addItemToList(item: String) {
                 itemList.add(item)
                 adapter.notifyDataSetChanged()
         }
 
-        fun removeItemFromList(position: Int) {
-                itemList.removeAt(position)
-                adapter.notifyDataSetChanged()
+        // Metode publik untuk menghapus item dari daftar
+        private fun removeItemFromList(position: Int) {
+                if (itemList.isNotEmpty() && position in 0 until itemList.size) {
+                        itemList.removeAt(position)
+                        adapter.notifyDataSetChanged()
+                }
         }
 }
